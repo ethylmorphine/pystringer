@@ -1,0 +1,3 @@
+* Zeroconf VPN project
+** Summary
+- This is a bare minimum containerized Flask app that provides zeroconf VPN profiles based on WireGuard.
