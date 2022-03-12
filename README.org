@@ -1,3 +1,3 @@
-* Zeroconf VPN project
-** Summary
-- This is a bare minimum containerized Flask app that provides zeroconf VPN profiles based on WireGuard.
+* pystringer project
+** Description
+- This is a hello-world containerized Flask app that gets a string in POST payload and responds with a result. It comes with Prometheus metrics fed into Graphana on a dedicated subdomain.
