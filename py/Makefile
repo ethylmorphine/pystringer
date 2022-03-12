@@ -22,7 +22,7 @@ init: $(VENV)
 	$(VENV_PIP) install -r $(REQUIREMENTS)
 
 deploy:
-	$(CD) $(SRC) && $(VENV_UWSGI) -s 0.0.0.0:8888 --enable-threads --manage-script-name --mount /=app:app
+	$(VENV_UWSGI) -s 0.0.0.0:8888 --enable-threads --manage-script-name --chdir $(SRC) --mount /=main:app
 
 clean:
 	[ ! -d $(VENV) ] || $(RM) -rf -- $(VENV)
