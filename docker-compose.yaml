@@ -13,6 +13,12 @@ services:
             backend:
                 ipv4_address: 172.16.236.10
         entrypoint: ["nginx", "-c", "/etc/nginx/nginx.conf"]
+        healthcheck:
+            test: ["CMD", "wget", "--no-verbose", "http://172.16.235.10"]
+            timeout: 10s
+            interval: 10s
+            retries: 10
+        restart: on-failure
 
     flask_back:
         build:
@@ -24,6 +30,12 @@ services:
         networks:
             backend:
                 ipv4_address: 172.16.236.11
+        healthcheck:
+            test: ["CMD", "nc", "172.16.236.11", "8888"]
+            timeout: 10s
+            interval: 10s
+            retries: 10
+        restart: on-failure
 
 networks:
     frontend:
