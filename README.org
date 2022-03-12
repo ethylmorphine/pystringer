@@ -1,3 +1,37 @@
 * pystringer project
 ** Description
-- This is a hello-world containerized Flask app that gets a string in POST payload and responds with a result. It comes with Prometheus metrics fed into Graphana on a dedicated subdomain.
+- This is a hello-world containerized Flask app that expects a string in POST payload and responds with a result pretty much like a CLI utility.
+** Deployment
+#+BEGIN_SRC sh
+
+### from the project root
+$ docker-compose up -d
+
+#+END_SRC
+** Usage
+- By default, nginx frontend listens on 127.0.0.1:80 and forwards requests to uWSGI running as a separate container.
+- Make sure you have ~curl~ installed.
+
+#+BEGIN_SRC sh
+
+### get list of valid requests
+$ curl http://127.0.0.1                            
+Valid requests: lowercase, uppercase, reverse, randomcase
+
+### convert a string to lowercase
+$ curl -d 'LOREM IPSUM DOLOR SIT AMET' http://127.0.0.1/lowercase                                                                       
+lorem ipsum dolor sit ame
+
+### convert a string to uppercase
+$ curl -d 'lorem ipsum dolor sit ame' http://127.0.0.1/uppercase
+LOREM IPSUM DOLOR SIT AME
+
+### convert a string to randomcase (that's my favorite)
+$ curl -d 'lorem ipsum dolor sit ame' http://127.0.0.1/randomcase
+loReM ipsuM DOloR SIt AME
+
+### reverse a string
+$ curl -d 'lorem ipsum dolor sit ame' http://127.0.0.1/reverse   
+ema tis rolod muspi merol
+
+#+END_SRC
