@@ -9,7 +9,7 @@ $ docker-compose up -d
 
 #+END_SRC
 ** Usage
-- By default, nginx frontend listens on 127.0.0.1:80 and forwards requests to uWSGI running as a separate container.
+- By default, nginx frontend listens on 127.0.0.1:80 and forwards requests to uWSGI running in a separate container.
 - Make sure you have ~curl~ installed.
 
 #+BEGIN_SRC sh
