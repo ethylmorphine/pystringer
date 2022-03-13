@@ -14,7 +14,7 @@ services:
                 ipv4_address: 172.16.236.10
         entrypoint: ["nginx", "-c", "/etc/nginx/nginx.conf"]
         healthcheck:
-            test: ["CMD", "wget", "--no-verbose", "http://172.16.235.10"]
+            test: ["CMD", "wget", "--no-verbose", "http://127.0.0.1"]
             timeout: 10s
             interval: 10s
             retries: 10
@@ -31,7 +31,7 @@ services:
             backend:
                 ipv4_address: 172.16.236.11
         healthcheck:
-            test: ["CMD", "nc", "172.16.236.11", "8888"]
+            test: ["CMD", "echo", "'test'", "|", "nc", "172.16.236.11", "8888"]
             timeout: 10s
             interval: 10s
             retries: 10
