@@ -6,8 +6,7 @@ rule_files:
   - alert.yaml
 
 scrape_configs:
-  - job_name: services
+  - job_name: pystringer_mon
     metrics_path: /metrics
     static_configs:
-      - targets:
-          - 'nginx_front:80'
+        - targets: ["nginx_front:80"]
