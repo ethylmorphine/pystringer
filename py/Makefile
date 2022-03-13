@@ -12,6 +12,7 @@ VENV_PIP=$(VENV)/bin/pip3
 VENV_UWSGI=$(VENV)/bin/uwsgi
 REQUIREMENTS=$(PWD)/requirements.txt
 SRC=$(PWD)/src
+PROMETHEUS_MULTIPROC_DIR=$(SRC)
 
 $(VENV):
 	$(HOST_PYTHON) -m venv $(VENV)
@@ -22,7 +23,7 @@ init: $(VENV)
 	$(VENV_PIP) install -r $(REQUIREMENTS)
 
 deploy:
-	$(VENV_UWSGI) -s 0.0.0.0:8888 --enable-threads --manage-script-name --chdir $(SRC) --mount /=main:app
+	PROMETHEUS_MULTIPROC_DIR=$(PROMETHEUS_MULTIPROC_DIR) $(VENV_UWSGI) -s 0.0.0.0:8888 --enable-threads --manage-script-name --chdir $(SRC) --mount /=main:app
 
 clean:
 	[ ! -d $(VENV) ] || $(RM) -rf -- $(VENV)
