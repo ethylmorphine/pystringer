@@ -1,3 +1,4 @@
 /py/.venv
 /py/src/app/__pycache__
+/py/src/*.db
 /README.org~
