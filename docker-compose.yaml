@@ -37,6 +37,18 @@ services:
             retries: 10
         restart: on-failure
 
+    prometheus:
+        image: prom/prometheus:v2.21.0
+        volumes:
+            - ./docker/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+            - ./docker/alert.yaml:/etc/prometheus/alert.yaml:ro
+        ports:
+            - "127.0.0.1:9090:9090"
+        networks:
+            backend:
+                ipv4_address: 172.16.236.12
+        command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yaml
+
 networks:
     frontend:
         ipam:
