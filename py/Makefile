@@ -28,3 +28,4 @@ deploy:
 clean:
 	[ ! -d $(VENV) ] || $(RM) -rf -- $(VENV)
 	[ ! -d $(SRC)/__pycache__ ] || $(RM) -rf -- $(SRC)/__pycache__
+	$(RM) -- $(SRC)/*.db || echo 'None'
