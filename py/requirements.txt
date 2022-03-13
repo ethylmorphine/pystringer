@@ -5,3 +5,4 @@ click == 8.0.4
 Werkzeug == 2.0.3
 MarkupSafe == 2.1.0
 uwsgi == 2.0.20
+prometheus_flask_exporter == 0.19.0
