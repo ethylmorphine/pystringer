@@ -2,6 +2,10 @@
 ** Description
 - This is a hello-world containerized Flask app that expects a string in POST payload and responds with a result pretty much like a CLI utility.
 ** Deployment
+- The service is deployed at localhost by default.
+- Port 80 is served by nginx.
+- Grafana is available at ~http://127.0.0.1/grafana~ with admin:admin login pair.
+- Grafana provides total request count graph in pystringer dashboard.
 #+BEGIN_SRC sh
 
 ### from the project root
@@ -35,3 +39,20 @@ $ curl -d 'lorem ipsum dolor sit ame' http://127.0.0.1/reverse
 ema tis rolod muspi merol
 
 #+END_SRC
+** Testing
+- Unit testing is implemented as a simple infinite loop that selects a method randomly on each iteration, generates a random string, and asserts against a known result.
+- Also, it's quite useful to populate metrics with some data.
+
+#+BEGIN_SRC sh
+
+### make sure you have requests module installed
+$ python3 app_test.py
+randomcase: cfrrxczxrpblfailvgilbaljpcststqfhcjwdvyfb
+response: cfrRxCZXrpbLFAiLVGilBALjpCSTSTQFhcjwdVyFB
+**************************************************
+lowercase: dbrgkrktghz
+response: dbrgkrktghz
+**************************************************
+...
+
+#+END_SEC
