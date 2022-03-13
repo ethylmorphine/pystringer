@@ -19,6 +19,8 @@ services:
             interval: 10s
             retries: 10
         restart: on-failure
+        depends_on:
+            - flask_back
 
     flask_back:
         build:
@@ -48,6 +50,8 @@ services:
             backend:
                 ipv4_address: 172.16.236.12
         command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yaml
+        depends_on:
+            - flask_back
 
     grafana:
         image: grafana/grafana:5.1.0
