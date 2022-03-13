@@ -42,12 +42,27 @@ services:
         volumes:
             - ./docker/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
             - ./docker/alert.yaml:/etc/prometheus/alert.yaml:ro
-        ports:
-            - "127.0.0.1:9090:9090"
+        expose:
+            - "9090"
         networks:
             backend:
                 ipv4_address: 172.16.236.12
         command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yaml
+
+    grafana:
+        image: grafana/grafana:5.1.0
+        volumes:
+            - ./docker/datasource.yaml:/etc/grafana/provisioning/datasources/default.yaml:ro
+            - ./docker/dashboard.yaml:/etc/grafana/provisioning/dashboards/default.yaml:ro
+            - ./docker/dashboards:/var/lib/grafana/dashboards:ro
+            - ./docker/grafana.ini:/etc/grafana/grafana.ini:ro
+        networks:
+            backend:
+                ipv4_address: 172.16.236.13
+        expose:
+            - "3000"
+        depends_on:
+            - prometheus
 
 networks:
     frontend:
