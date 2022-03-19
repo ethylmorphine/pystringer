@@ -4,8 +4,10 @@ import random
 import os
 import time
 
+url = os.getenv('PYSTRINGER_URL')
+if not url:
+  url = 'http://127.0.0.1'
 
-url = 'http://127.0.0.1'
 methods = ('lowercase', 'uppercase', 'randomcase', 'reverse')
 
 
