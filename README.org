@@ -2,6 +2,7 @@
 ** Description
 - This is a hello-world containerized Flask app that expects a string in POST payload and responds with a result pretty much like a CLI utility.
 ** Deployment
+*** docker-compose
 - The service is deployed at localhost by default.
 - Port 80 is served by nginx.
 - Grafana is available at ~http://127.0.0.1/grafana~ with admin:admin login pair.
@@ -10,6 +11,47 @@
 
 ### from the project root
 $ docker-compose up -d
+
+#+END_SRC
+*** Kubernetes + Minikube
+- Minikube assigns random IPs and ports for external services.
+- Minikube instance should be running upon deployment.
+- Grafana is available at http://$MINIKUBE_SERVICE_IP:PORT/grafana/login
+#+BEGIN_SRC sh
+
+### start minikibe
+$ minikube start
+
+### inject Docker envs to minikube instance
+### to enable locally built image discovery
+$ eval $(minikube -p minikube docker-env)
+
+### build pystringer image
+$ docker build -t pystringer -f ./docker/Dockerfile.app .
+
+### deploy the app
+$ kubectl apply -f ./k8s
+
+### wait until the pod is operational
+$ kubectl get pods
+NAME                              READY   STATUS    RESTARTS   AGE
+pystringer-dep-7d65d4b4d6-gbgxn   4/4     Running   0          79s
+
+### expose the service
+$ minikube service pystringer-service
+
+### get the URL
+$ minikube service --all
+😿  service default/kubernetes has no node port
+|-----------|--------------------|--------------|---------------------------|
+| NAMESPACE |        NAME        | TARGET PORT  |            URL            |
+|-----------|--------------------|--------------|---------------------------|
+| default   | kubernetes         | No node port |
+| default   | pystringer-service |           80 | http://192.168.49.2:31527 |
+|-----------|--------------------|--------------|---------------------------|
+
+### run unit testing
+$ PYSTRINGER_URL=http://192.168.49.2:31527 python3 app_test.py
 
 #+END_SRC
 ** Usage
