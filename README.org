@@ -55,7 +55,7 @@ $ PYSTRINGER_URL=http://192.168.49.2:31527 python3 app_test.py
 
 #+END_SRC
 ** Usage
-- By default, nginx frontend listens on 127.0.0.1:80 and forwards requests to uWSGI running in a separate container.
+- By default on docker-compose deployment, nginx frontend listens on 127.0.0.1:80 and forwards requests to uWSGI running in a separate container.
 - Make sure you have ~curl~ installed.
 
 #+BEGIN_SRC sh
@@ -84,6 +84,7 @@ ema tis rolod muspi merol
 ** Testing
 - Unit testing is implemented as a simple infinite loop that selects a method randomly on each iteration, generates a random string, and asserts against a known result.
 - Also, it's quite useful to populate metrics with some data.
+- You may optionally provide a URL via ~PYSTRINGER_URL~ enivornment variable.
 
 #+BEGIN_SRC sh
 
