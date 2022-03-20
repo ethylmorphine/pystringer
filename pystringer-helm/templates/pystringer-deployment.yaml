@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pystringer-dep
+  labels:
+    app: pystringer
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pystringer
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: pystringer
+    spec:
+      containers:
+        - image: pystringer
+          imagePullPolicy: Never
+          name: flask-back
+          ports:
+            - containerPort: 8888
+
+        - image: nginx:1.21.6-alpine
+          name: nginx-front
+          command: ['nginx', '-c', '/etc/nginx/nginx.conf']
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config-volume
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+
+        - image: prom/prometheus:v2.21.0
+          name: prometheus
+          args: ['--web.enable-lifecycle', '--config.file=/etc/prometheus/prometheus.yaml']
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: prometheus-config-volume
+              mountPath: /etc/prometheus
+              readOnly: true
+
+        - image: grafana/grafana:5.1.0
+          name: grafana
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: grafana-config-volume
+              mountPath: /etc/grafana
+              readOnly: true
+            - name: grafana-dashboards-volume
+              mountPath: /var/lib/grafana/dashboards
+              readOnly: true
+      restartPolicy: Always
+
+      volumes:
+        - name: nginx-config-volume
+          configMap:
+            name: nginx-config
+
+        - name: prometheus-config-volume
+          configMap:
+            name: prometheus-config
+
+        - name: grafana-config-volume
+          configMap:
+            name: grafana-config
+            items:
+              - key: datasources-default.yaml
+                path: provisioning/datasources/default.yaml
+              - key: dashboards-default.yaml
+                path: provisioning/dashboards/default.yaml
+              - key: grafana.ini
+                path: grafana.ini
+
+        - name: grafana-dashboards-volume
+          configMap:
+            name: grafana-dashboards
