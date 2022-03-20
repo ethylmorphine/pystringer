@@ -1,6 +1,11 @@
 * pystringer project
 ** Description
 - This is a hello-world containerized Flask app that expects a string in POST payload and responds with a result pretty much like a CLI utility.
+- It comes with Grafana requests' gragh.
+- *NB!* There are some bad design decisions for the sake of simplicity (e.g. putting monitoring and the app itself into a single pod).
+- Also, a production-grade app must use ingress instead of NodePort.
+- Also, a /good/ nginx configuration must ensure invalid requests can't even reach the app.
+- Also, a /nice/ project would have a CI pipeline to test Dockerfile build, run unit and monitoring testing, and deploy the thing somewhere. Yet, it's just a dumb string manipulation app.
 ** Deployment
 *** docker-compose
 - The service is deployed at localhost by default.
@@ -52,6 +57,36 @@ $ minikube service --all
 
 ### run unit testing
 $ PYSTRINGER_URL=http://192.168.49.2:31527 python3 app_test.py
+
+#+END_SRC
+*** Helm + Minikube
+- It is quite similar to k8s deployment.
+#+BEGIN_SRC sh
+
+### start minikube
+$ minikube start
+
+### export minikube envs
+$ eval $(minikube -p minikube docker-env)
+
+### build the Docker image
+$ docker build -t pystringer -f ./docker/Dockerfile.app .
+
+### deploy the chart
+$ helm install pystringer pystringer-helm
+
+### get the service URL
+$ minikube service --all
+😿  service default/kubernetes has no node port
+|-----------|--------------------|--------------|---------------------------|
+| NAMESPACE |        NAME        | TARGET PORT  |            URL            |
+|-----------|--------------------|--------------|---------------------------|
+| default   | kubernetes         | No node port |
+| default   | pystringer-service |           80 | http://192.168.49.2:32427 |
+|-----------|--------------------|--------------|---------------------------|
+
+### run unit testing
+$ PYSTRINGER_URL=http://192.168.49.2:32427 python3 app_test.py
 
 #+END_SRC
 ** Usage
